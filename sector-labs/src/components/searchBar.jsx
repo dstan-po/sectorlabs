@@ -4,16 +4,19 @@ import GistCard from "./gistCard";
 class SearchBar extends Component {
     state = {
         cards: [],
-        descriptions: []
+        descriptions: [],
+        searchedAccount: "",
+        error: ""
     }
 
-    getSearchValue() {
-
+    updateSearchedUser = (newText) => {
+        this.setState({searchedAccount: newText})
     }
+
 
     handleSearch = async () => {
         try {
-            const response = await fetch('https://api.github.com/users/' + 'LuisMDeveloper' + '/gists', {
+            const response = await fetch('https://api.github.com/users/' + this.state.searchedAccount + '/gists', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -22,7 +25,7 @@ class SearchBar extends Component {
             });
 
             if (!response.ok) {
-                throw new Error("User not found!");
+                throw new Error(response);
             }
 
             const result = await response.json();
@@ -38,7 +41,8 @@ class SearchBar extends Component {
                         filesFound.push({
                             key: keyIndex,
                             url: gist['files'][key]['raw_url'],
-                            name: gist['files'][key]['filename']
+                            name: gist['files'][key]['filename'],
+                            language: gist['files'][key]['language']
                         })
                         keyIndex++;
                     })
@@ -46,7 +50,7 @@ class SearchBar extends Component {
                     newCards.push(
                         <GistCard
                             key={i}
-                            forksUrl = {gist['forks_url']}
+                            forksUrl={gist['forks_url']}
                             files={filesFound}
                             description={gist['description']}>
                         </GistCard>
@@ -58,7 +62,7 @@ class SearchBar extends Component {
 
             this.setState({cards: newCards})
         } catch (error) {
-            console.log(error);
+            this.setState({error: error})
         }
 
 
@@ -67,14 +71,17 @@ class SearchBar extends Component {
     showCards = () => {
         if (this.state.cards.length !== 0) {
             return <div>
-                <span>
-                    Number of gists found: {this.state.cards.length}
-                </span>
+            <span>
+                <hr/>
+                Number of gists found: {this.state.cards.length}
+                <hr/>
+            </span>
                 {this.state.cards}
             </div>;
         } else {
-            return <div><br/><span>No gists found</span></div>;
+            return <h1><br/>No gists found</h1>;
         }
+
     }
 
     render() {
@@ -83,6 +90,7 @@ class SearchBar extends Component {
                 <input
                     type={"text"}
                     placeholder={"Search user..."}
+                    onInput={text => this.updateSearchedUser(text.target.value)}
                 />
                 <button onClick={this.handleSearch}>Search</button>
                 {this.showCards()}

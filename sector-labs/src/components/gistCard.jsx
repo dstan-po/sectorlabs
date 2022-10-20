@@ -3,7 +3,8 @@ import React, {Component} from "react";
 class GistCard extends Component {
     state = {
         forksSearched: false,
-        forksFound: []
+        forksFound: [],
+        languages: new Set()
     }
 
     constructor(props) {
@@ -17,6 +18,29 @@ class GistCard extends Component {
         } else {
             return "No description";
         }
+    }
+
+    showLanguages = () => {
+        if (this.props.files !== null) {
+            let languagesSet = new Set();
+
+            this.props.files.forEach(file => {
+                if (file['language'] !== null)
+                    languagesSet.add(file['language']);
+            })
+
+            if (languagesSet.size !== 0) {
+                const languages = Array.from(languagesSet);
+
+                return <div>
+                    {languages.map(language =>
+                        <span className={"border border-success rounded"} style={{marginRight: "1vw", padding: "2px"}}>{language}</span>)}
+                    <br/></div>
+            } else {
+                return <span className={"border border-warning rounded"} style={{padding: "2px"}}>No language specified<br/></span>
+            }
+        }
+        return <p></p>
     }
 
     showFiles = () => {
@@ -66,8 +90,11 @@ class GistCard extends Component {
                         {this.state.forksFound.map(fork => (
                             <a href={"https://gist.github.com/" + fork['id']}>
                                 <li>
-                                    <img height={30} width={30} src={fork['owner']['avatar_url']}/>
-                                    <p>{fork['owner']['login']}</p>
+                                    <div style={{display: "inline-flex"}} className={"m-2"}>
+                                        <img height={30} width={30} src={fork['owner']['avatar_url']}
+                                             alt={"Fork owner avatar"}/>
+                                        <p>{fork['owner']['login']}</p>
+                                    </div>
                                 </li>
                             </a>
                         ))}
@@ -82,6 +109,7 @@ class GistCard extends Component {
         return (
             <div>
                 <hr/>
+                {this.showLanguages()}
                 {this.showDescription()}
                 <hr/>
                 Files: {this.showFiles()}
