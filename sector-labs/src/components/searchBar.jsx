@@ -27,41 +27,54 @@ class SearchBar extends Component {
 
             const result = await response.json();
 
-            // console.log("Result is: ", JSON.parse(result));
-            let numberOfFiles = "Found: " + result.length + " gists !\n";
-            let gists = "Files: "
             let newCards = []
-            let descriptions = []
             if (result.size !== 0) {
                 let i = 0;
                 result.forEach(gist => {
-                    // gists += Object.keys(gist['files'])[0] + "\n"
-                    // newCards.push(
-                    //     <GistCard
-                    //         key={i}
-                    //         description={gist['description']}
-                    //     />)
-                    descriptions.push({id: i, text: gist['description']})
-                    gists += gist['description'] + "\n";
+                    let filesFound = [];
+                    let keyIndex = 1;
+
+                    Object.keys(gist['files']).forEach(key => {
+                        filesFound.push({
+                            key: keyIndex,
+                            url: gist['files'][key]['raw_url'],
+                            name: gist['files'][key]['filename']
+                        })
+                        keyIndex++;
+                    })
+
                     newCards.push(
                         <GistCard
-                            description={gist['description']}
-                            key={i}>
+                            key={i}
+                            forksUrl = {gist['forks_url']}
+                            files={filesFound}
+                            description={gist['description']}>
                         </GistCard>
                     )
                     i += 1;
                 })
             }
-            console.log("Result is: ", numberOfFiles, gists);
             console.log("Result is: ", result);
 
             this.setState({cards: newCards})
-            this.setState({descriptions: descriptions})
         } catch (error) {
             console.log(error);
         }
 
 
+    }
+
+    showCards = () => {
+        if (this.state.cards.length !== 0) {
+            return <div>
+                <span>
+                    Number of gists found: {this.state.cards.length}
+                </span>
+                {this.state.cards}
+            </div>;
+        } else {
+            return <div><br/><span>No gists found</span></div>;
+        }
     }
 
     render() {
@@ -72,7 +85,7 @@ class SearchBar extends Component {
                     placeholder={"Search user..."}
                 />
                 <button onClick={this.handleSearch}>Search</button>
-                {this.state.cards}
+                {this.showCards()}
             </div>
         )
     }
