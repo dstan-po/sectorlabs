@@ -3,8 +3,7 @@ import React, {Component} from "react";
 class GistCard extends Component {
     state = {
         forksSearched: false,
-        forksFound: [],
-        languages: new Set()
+        forksFound: []
     }
 
     constructor(props) {
