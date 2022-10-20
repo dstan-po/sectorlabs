@@ -13,6 +13,40 @@ class SearchBar extends Component {
         this.setState({searchedAccount: newText})
     }
 
+    updateCards = (result) => {
+        let newCards = []
+
+        if (result.size !== 0) {
+            let i = 0;
+            result.forEach(gist => {
+                let filesFound = [];
+                let keyIndex = 1;
+
+                Object.keys(gist['files']).forEach(key => {
+                    filesFound.push({
+                        key: keyIndex,
+                        url: gist['files'][key]['raw_url'],
+                        name: gist['files'][key]['filename'],
+                        language: gist['files'][key]['language']
+                    })
+                    keyIndex++;
+                })
+
+                newCards.push(
+                    <GistCard
+                        key={i}
+                        forksUrl={gist['forks_url']}
+                        files={filesFound}
+                        description={gist['description']}>
+                    </GistCard>
+                )
+                i += 1;
+            })
+        }
+
+        this.setState({cards: []})
+        this.setState({cards: newCards})
+    }
 
     handleSearch = async () => {
         try {
@@ -28,42 +62,9 @@ class SearchBar extends Component {
                 throw new Error(response);
             }
 
-            const result = await response.json();
-
-            let newCards = []
-            if (result.size !== 0) {
-                let i = 0;
-                result.forEach(gist => {
-                    let filesFound = [];
-                    let keyIndex = 1;
-
-                    Object.keys(gist['files']).forEach(key => {
-                        filesFound.push({
-                            key: keyIndex,
-                            url: gist['files'][key]['raw_url'],
-                            name: gist['files'][key]['filename'],
-                            language: gist['files'][key]['language']
-                        })
-                        keyIndex++;
-                    })
-
-                    newCards.push(
-                        <GistCard
-                            key={i}
-                            forksUrl={gist['forks_url']}
-                            files={filesFound}
-                            description={gist['description']}>
-                        </GistCard>
-                    )
-                    i += 1;
-                })
-            }
-            console.log("Result is: ", result);
-
-            this.setState({cards: []})
-            this.setState({cards: newCards})
+            this.updateCards(await response.json());
         } catch (error) {
-            this.setState({error: error})
+            console.log(error)
         }
 
 

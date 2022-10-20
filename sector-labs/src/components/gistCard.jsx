@@ -72,11 +72,11 @@ class GistCard extends Component {
             }
 
             const result = await response.json();
-            console.log(result);
+
             this.setState({forksFound: result})
             this.setState({forksSearched: true});
         } catch (error) {
-            console.log(error);
+            console.log(error)
         }
     }
 
@@ -87,12 +87,13 @@ class GistCard extends Component {
             if (this.state.forksFound.length !== 0) {
                 //TODO Make this a separate component
                 return (
-                    <ul>
+                    <ul className={"list-group"}>
                         {this.state.forksFound.map(fork => (
                             <a href={"https://gist.github.com/" + fork['id']}>
-                                <li>
+                                <li className={"list-group-item"}>
                                     <div style={{display: "inline-flex"}} className={"m-2"}>
-                                        <img height={30} width={30} src={fork['owner']['avatar_url']}
+                                        <img style={{marginRight: "0.5vw"}} height={30} width={30}
+                                             src={fork['owner']['avatar_url']}
                                              alt={"Fork owner avatar"}/>
                                         <p>{fork['owner']['login']}</p>
                                     </div>
