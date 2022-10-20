@@ -62,7 +62,10 @@ class SearchBar extends Component {
                 throw new Error(response);
             }
 
-            this.updateCards(await response.json());
+            const result = await response.json();
+
+            this.updateCards(result);
+            this.setState({searchedAccount: ""})
         } catch (error) {
             console.log(error)
         }
@@ -75,27 +78,32 @@ class SearchBar extends Component {
             return <div>
             <span>
                 <hr/>
-                Number of gists found: {this.state.cards.length}
-                <hr/>
+                <h2>
+                    Number of gists found: {this.state.cards.length}
+                </h2>
+                <hr/><br/>
             </span>
                 {this.state.cards}
             </div>;
         } else {
             return <h1><br/>No gists found</h1>;
         }
-
     }
 
     render() {
         return (
             <div style={{marginTop: "2vh"}}>
-                <input
-                    style={{marginRight: "2vw"}}
-                    type={"text"}
-                    placeholder={"Search user..."}
-                    onInput={text => this.updateSearchedUser(text.target.value)}
-                />
-                <button onClick={this.handleSearch}>Search</button>
+                <div style={{display: "flex", justifyContent: "center"}}>
+                    <input
+                        className={"form-control"}
+                        style={{marginRight: "1vw"}}
+                        type={"text"}
+                        placeholder={"Search user..."}
+                        value={this.state.searchedAccount}
+                        onInput={text => this.updateSearchedUser(text.target.value)}
+                    />
+                    <button className={"btn btn-primary"} onClick={this.handleSearch}>Search</button>
+                </div>
                 {this.showCards()}
             </div>
         )

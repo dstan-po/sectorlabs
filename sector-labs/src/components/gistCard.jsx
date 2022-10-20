@@ -82,7 +82,7 @@ class GistCard extends Component {
 
     showForks = () => {
         if (!this.state.forksSearched) {
-            return <button onClick={this.searchForks}>Search forks</button>;
+            return <button className={"btn btn-secondary"} onClick={this.searchForks}>Search forks</button>;
         } else {
             if (this.state.forksFound.length !== 0) {
                 //TODO Make this a separate component
@@ -109,15 +109,15 @@ class GistCard extends Component {
 
     render() {
         return (
-            <div>
-                <hr/>
+            <div className={"border rounded p-2"} style={{height: "100%", marginBottom: "4vh"}}>
+                <hr className={"bg-dark"}/>
                 {this.showLanguages()}
                 {this.showDescription()}
-                <hr/>
+                <hr className={"bg-dark"}/>
                 Files: {this.showFiles()}
-                <hr/>
+                <hr className={"bg-dark"}/>
                 {this.showForks()}
-                <hr/>
+                <hr className={"bg-dark"}/>
                 <br/>
             </div>
         )
