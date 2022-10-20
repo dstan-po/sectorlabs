@@ -60,6 +60,7 @@ class SearchBar extends Component {
             }
             console.log("Result is: ", result);
 
+            this.setState({cards: []})
             this.setState({cards: newCards})
         } catch (error) {
             this.setState({error: error})
@@ -86,8 +87,9 @@ class SearchBar extends Component {
 
     render() {
         return (
-            <div>
+            <div style={{marginTop: "2vh"}}>
                 <input
+                    style={{marginRight: "2vw"}}
                     type={"text"}
                     placeholder={"Search user..."}
                     onInput={text => this.updateSearchedUser(text.target.value)}

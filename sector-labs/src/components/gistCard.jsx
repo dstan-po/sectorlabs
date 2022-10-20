@@ -34,10 +34,12 @@ class GistCard extends Component {
 
                 return <div>
                     {languages.map(language =>
-                        <span className={"border border-success rounded"} style={{marginRight: "1vw", padding: "2px"}}>{language}</span>)}
+                        <span className={"border border-success rounded"}
+                              style={{marginRight: "1vw", padding: "2px"}}>{language}</span>)}
                     <br/></div>
             } else {
-                return <span className={"border border-warning rounded"} style={{padding: "2px"}}>No language specified<br/></span>
+                return <span className={"border border-warning rounded"}
+                             style={{padding: "2px"}}>No language specified<br/></span>
             }
         }
         return <p></p>
@@ -56,7 +58,6 @@ class GistCard extends Component {
     }
 
     searchForks = async () => {
-
         try {
             const response = await fetch(this.props.forksUrl, {
                 method: 'GET',
