@@ -39,7 +39,7 @@ class LanguagesTags extends Component {
 
     render() {
         return (
-            <div>
+            <div key={0}>
                 {this.showLanguagesTags()}
             </div>
         )
