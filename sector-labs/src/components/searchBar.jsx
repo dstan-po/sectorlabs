@@ -7,11 +7,15 @@ class SearchBar extends Component {
         descriptions: [],
         searchedAccount: "",
         displayedAccount: "",
-        error: ""
+        error: "",
+        isSearchDisabled: true
     }
 
     updateSearchedUser = (newText) => {
-        this.setState({searchedAccount: newText})
+        if (newText.length > 0)
+            this.setState({searchedAccount: newText, isSearchDisabled: false})
+        else
+            this.setState({searchedAccount: newText})
     }
 
     updateCards = (result) => {
@@ -63,7 +67,7 @@ class SearchBar extends Component {
 
             this.updateCards(result);
             this.setState({displayedAccount: this.state.searchedAccount})
-            this.setState({searchedAccount: ""})
+            this.setState({searchedAccount: "", isSearchDisabled: true})
         } catch (error) {
             console.log(error)
         }
@@ -109,7 +113,9 @@ class SearchBar extends Component {
                         value={this.state.searchedAccount}
                         onInput={text => this.updateSearchedUser(text.target.value)}
                     />
-                    <button className={"btn btn-primary"} onClick={this.handleSearch}>Search</button>
+                    <button className={"btn btn-primary"} onClick={this.handleSearch} disabled={this.state.isSearchDisabled}>
+                        Search
+                    </button>
                 </div>
                 <div style={{}}>
                     {this.showSearchResult()}
