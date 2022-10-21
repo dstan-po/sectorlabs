@@ -1,9 +1,10 @@
 import React, {Component} from "react";
+import FilesCard from "./filesCard";
 
 class GistCard extends Component {
     state = {
         forksSearched: false,
-        forksFound: []
+        forksFound: [],
     }
 
     constructor(props) {
@@ -13,7 +14,7 @@ class GistCard extends Component {
 
     showDescription = () => {
         if (this.props.description !== null) {
-            return "Description: " + this.props.description.replace(/[^a-z0-9áéíóúñü\n\\<> \.,_-]/gim, "").trim();
+            return <p style={{overflow: "auto"}}>{"Description: " + this.props.description.replace(/[^a-z0-9áéíóúñü\n\\<> \.,_-]/gim, "").trim()}</p>;
         } else {
             return "No description";
         }
@@ -46,11 +47,7 @@ class GistCard extends Component {
 
     showFiles = () => {
         if (this.props.files !== null) {
-            return <ul>{this.props.files.map(file =>
-                <li>
-                    <div key={file.key}><a href={file.url}>{file.name}</a><br/></div>
-                </li>
-            )}</ul>
+            return <FilesCard key={this.props.key} files={this.props.files}/>
         } else {
             return "No files."
         }
@@ -84,22 +81,24 @@ class GistCard extends Component {
             return <button className={"btn btn-secondary"} onClick={this.searchForks}>Search forks</button>;
         } else {
             if (this.state.forksFound.length !== 0) {
-                //TODO Make this a separate component
                 return (
-                    <ul className={"list-group"}>
-                        {this.state.forksFound.map(fork => (
-                            <a href={"https://gist.github.com/" + fork['id']}>
-                                <li className={"list-group-item"}>
-                                    <div style={{display: "inline-flex"}} className={"m-2"}>
-                                        <img style={{marginRight: "0.5vw"}} height={30} width={30}
-                                             src={fork['owner']['avatar_url']}
-                                             alt={"Fork owner avatar"}/>
-                                        <p>{fork['owner']['login']}</p>
-                                    </div>
-                                </li>
-                            </a>
-                        ))}
-                    </ul>);
+                    <div key={this.props.key}>
+                        <h5>Forks</h5>
+                        <ul className={"list-group"}>
+                            {this.state.forksFound.map((fork, index) => (
+                                <a href={"https://gist.github.com/" + fork['id']}>
+                                    <li key={index} className={"list-group-item"}>
+                                        <div style={{display: "inline-flex"}} className={"m-2"}>
+                                            <img style={{marginRight: "0.5vw"}} height={30} width={30}
+                                                 src={fork['owner']['avatar_url']}
+                                                 alt={"Fork owner avatar"}/>
+                                            <p>{fork['owner']['login']}</p>
+                                        </div>
+                                    </li>
+                                </a>
+                            ))}
+                        </ul>
+                    </div>);
             } else {
                 return "No forks";
             }
@@ -108,16 +107,15 @@ class GistCard extends Component {
 
     render() {
         return (
-            <div className={"border rounded p-2"} style={{height: "100%", marginBottom: "4vh"}}>
-                <hr className={"bg-dark"}/>
+            <div key={this.props.key} className={"border border-dark rounded p-2"}
+                 style={{marginBottom: "4vh", width: "30%", marginLeft: "1.6666%", marginRight: "1.6666%", height: "100%", borderColor: "3px"}}>
                 {this.showLanguages()}
+                <hr className={"bg-dark"}/>
                 {this.showDescription()}
                 <hr className={"bg-dark"}/>
-                Files: {this.showFiles()}
+                {this.showFiles()}
                 <hr className={"bg-dark"}/>
                 {this.showForks()}
-                <hr className={"bg-dark"}/>
-                <br/>
             </div>
         )
     }

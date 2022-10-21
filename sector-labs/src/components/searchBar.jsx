@@ -6,6 +6,7 @@ class SearchBar extends Component {
         cards: [],
         descriptions: [],
         searchedAccount: "",
+        displayedAccount: "",
         error: ""
     }
 
@@ -34,13 +35,12 @@ class SearchBar extends Component {
 
                 newCards.push(
                     <GistCard
-                        key={i}
+                        key={i++}
                         forksUrl={gist['forks_url']}
                         files={filesFound}
                         description={gist['description']}>
                     </GistCard>
                 )
-                i += 1;
             })
         }
 
@@ -65,6 +65,7 @@ class SearchBar extends Component {
             const result = await response.json();
 
             this.updateCards(result);
+            this.setState({displayedAccount: this.state.searchedAccount})
             this.setState({searchedAccount: ""})
         } catch (error) {
             console.log(error)
@@ -73,26 +74,35 @@ class SearchBar extends Component {
 
     }
 
-    showCards = () => {
+    showSearchResult = () => {
         if (this.state.cards.length !== 0) {
-            return <div>
-            <span>
-                <hr/>
-                <h2>
-                    Number of gists found: {this.state.cards.length}
-                </h2>
-                <hr/><br/>
-            </span>
-                {this.state.cards}
-            </div>;
+            return (
+                <span style={{width: "100%"}}>
+                    <hr/>
+                        <h2>Owner: {this.state.displayedAccount}</h2>
+                        <hr/>
+                        <hr/>
+                        <h2>Number of gists found: {this.state.cards.length}</h2>
+                    <hr/><br/>
+                </span>
+            )
         } else {
             return <h1><br/>No gists found</h1>;
         }
     }
 
+    showCards = () => {
+        if (this.state.cards.length !== 0) {
+            return <div style={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}>
+                    {this.state.cards}
+            </div>;
+        }
+        return <p/>
+    }
+
     render() {
         return (
-            <div style={{marginTop: "2vh"}}>
+            <div style={{marginTop: "2vh"}} key={0}>
                 <div style={{display: "flex", justifyContent: "center"}}>
                     <input
                         className={"form-control"}
@@ -104,7 +114,11 @@ class SearchBar extends Component {
                     />
                     <button className={"btn btn-primary"} onClick={this.handleSearch}>Search</button>
                 </div>
-                {this.showCards()}
+                <div style={{}}>
+                    {this.showSearchResult()}
+                    <br/>
+                    {this.showCards()}
+                </div>
             </div>
         )
     }
