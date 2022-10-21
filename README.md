@@ -7,9 +7,10 @@
 ### `npm install`
 ### `npm start`
 
-##Usage
+## Usage
 
 Type the GitHub user into the search bar and press "Search"
+
 To see the forks press the "Search forks" button
 
 ## About
