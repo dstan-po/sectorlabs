@@ -40,7 +40,7 @@ class ForksCard extends Component {
 
                         <ul className={"list-group"}>
                             {this.state.forksFound.map((fork, index) => (
-                                <a href={"https://gist.github.com/" + fork['id']}>
+                                <a href={"https://gist.github.com/" + fork['id']} target={"_blank"} rel={"noreferrer"}>
                                     <li key={index} className={"list-group-item"}>
                                         <div style={{display: "inline-flex"}} className={"m-2"}>
                                             <img style={{marginRight: "0.5vw"}}

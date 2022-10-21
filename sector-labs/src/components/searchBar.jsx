@@ -18,24 +18,21 @@ class SearchBar extends Component {
         let newCards = []
 
         if (result.size !== 0) {
-            let i = 0;
-            result.forEach(gist => {
+            result.forEach((gist, index) => {
                 let filesFound = [];
-                let keyIndex = 1;
 
-                Object.keys(gist['files']).forEach(key => {
+                Object.keys(gist['files']).forEach((key, index2) => {
                     filesFound.push({
-                        key: keyIndex,
+                        key: index2,
                         url: gist['files'][key]['raw_url'],
                         name: gist['files'][key]['filename'],
                         language: gist['files'][key]['language']
                     })
-                    keyIndex++;
                 })
 
                 newCards.push(
                     <GistCard
-                        key={i++}
+                        key={index}
                         forksUrl={gist['forks_url']}
                         files={filesFound}
                         description={gist['description']}>
@@ -94,7 +91,7 @@ class SearchBar extends Component {
     showCards = () => {
         if (this.state.cards.length !== 0) {
             return <div style={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}>
-                    {this.state.cards}
+                {this.state.cards}
             </div>;
         }
         return <p/>

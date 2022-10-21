@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import FilesCard from "./filesCard";
 import LanguagesTags from "./LanguagesTags";
-import ForksCard from "./ForksCard";
+import ForksCard from "./forksCard";
 
 class GistCard extends Component {
     state = {
