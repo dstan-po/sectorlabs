@@ -7,7 +7,6 @@ class SearchBar extends Component {
         descriptions: [],
         searchedAccount: "",
         displayedAccount: "",
-        error: "",
         isSearchDisabled: true
     }
 
@@ -49,7 +48,7 @@ class SearchBar extends Component {
         this.setState({cards: newCards})
     }
 
-    handleSearch = async () => {
+    getGists = async () => {
         try {
             const response = await fetch('https://api.github.com/users/' + this.state.searchedAccount + '/gists', {
                 method: 'GET',
@@ -69,6 +68,9 @@ class SearchBar extends Component {
             this.setState({displayedAccount: this.state.searchedAccount})
             this.setState({searchedAccount: "", isSearchDisabled: true})
         } catch (error) {
+            this.updateCards([]);
+            this.setState({displayedAccount: this.state.searchedAccount})
+            this.setState({searchedAccount: "", isSearchDisabled: true})
             console.log(error)
         }
 
@@ -84,7 +86,7 @@ class SearchBar extends Component {
                         <hr/>
                         <hr/>
                         <h2>Number of gists found: {this.state.cards.length}</h2>
-                    <hr/><br/>
+                    <hr/>
                 </span>
             )
         } else {
@@ -113,13 +115,13 @@ class SearchBar extends Component {
                         value={this.state.searchedAccount}
                         onInput={text => this.updateSearchedUser(text.target.value)}
                     />
-                    <button className={"btn btn-primary"} onClick={this.handleSearch} disabled={this.state.isSearchDisabled}>
+                    <button className={"btn btn-primary"} onClick={this.getGists}
+                            disabled={this.state.isSearchDisabled}>
                         Search
                     </button>
                 </div>
                 <div style={{}}>
                     {this.showSearchResult()}
-                    <br/>
                     {this.showCards()}
                 </div>
             </div>

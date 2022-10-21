@@ -17,7 +17,9 @@ class GistCard extends Component {
     showDescription = () => {
         if (this.props.description !== null) {
             return <p
-                style={{overflow: "auto"}}>{"Description: " + this.props.description.replace(/[^a-z0-9áéíóúñü\n\\<> \.,_-]/gim, "").trim()}</p>;
+                style={{overflow: "auto"}}>
+                {"Description: " + this.props.description.replace(/[^a-z0-9áéíóúñü\n\\<> \.,_-]/gim, "").trim()}
+            </p>;
         } else {
             return "No description";
         }
