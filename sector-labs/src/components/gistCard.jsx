@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import FilesCard from "./filesCard";
+import LanguagesTags from "./LanguagesTags";
 
 class GistCard extends Component {
     state = {
@@ -14,35 +15,15 @@ class GistCard extends Component {
 
     showDescription = () => {
         if (this.props.description !== null) {
-            return <p style={{overflow: "auto"}}>{"Description: " + this.props.description.replace(/[^a-z0-9áéíóúñü\n\\<> \.,_-]/gim, "").trim()}</p>;
+            return <p
+                style={{overflow: "auto"}}>{"Description: " + this.props.description.replace(/[^a-z0-9áéíóúñü\n\\<> \.,_-]/gim, "").trim()}</p>;
         } else {
             return "No description";
         }
     }
 
     showLanguages = () => {
-        if (this.props.files !== null) {
-            let languagesSet = new Set();
-
-            this.props.files.forEach(file => {
-                if (file['language'] !== null)
-                    languagesSet.add(file['language']);
-            })
-
-            if (languagesSet.size !== 0) {
-                const languages = Array.from(languagesSet);
-
-                return <div>
-                    {languages.map(language =>
-                        <span className={"border border-success rounded"}
-                              style={{marginRight: "1vw", padding: "2px"}}>{language}</span>)}
-                    <br/></div>
-            } else {
-                return <span className={"border border-warning rounded"}
-                             style={{padding: "2px"}}>No language specified<br/></span>
-            }
-        }
-        return <p></p>
+        return <LanguagesTags files={this.props.files}/>
     }
 
     showFiles = () => {
@@ -108,7 +89,14 @@ class GistCard extends Component {
     render() {
         return (
             <div key={this.props.key} className={"border border-dark rounded p-2"}
-                 style={{marginBottom: "4vh", width: "30%", marginLeft: "1.6666%", marginRight: "1.6666%", height: "100%", borderColor: "3px"}}>
+                 style={{
+                     marginBottom: "4vh",
+                     width: "30%",
+                     marginLeft: "1.6666%",
+                     marginRight: "1.6666%",
+                     height: "100%",
+                     borderColor: "3px"
+                 }}>
                 {this.showLanguages()}
                 <hr className={"bg-dark"}/>
                 {this.showDescription()}
